@@ -6,7 +6,6 @@ import {
   AppBar,
   Toolbar,
   IconButton,
-  Button,
   Drawer,
   List,
   ListItemButton,
@@ -15,6 +14,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import Image from "next/image";
+import AnimatedButton from "./AnimatedButton";
 
 const menuItems = [
   { label: "Projekty", href: "/work" }, // pokazujecie portfolio / realizacje
@@ -39,6 +39,7 @@ export default function Navbar() {
           boxShadow: "none",
           px: { xs: 1, md: 2 },
           top: 20,
+          paddingBottom: "10px",
           // height: 56,
         }}
       >
@@ -132,23 +133,7 @@ export default function Navbar() {
           <Box
             sx={{ display: "flex", alignItems: "center", gap: 1.5, ml: "auto" }}
           >
-            <Button
-              variant="outlined"
-              sx={{
-                display: { xs: "none", md: "inline-flex" },
-                borderRadius: 9999,
-                textTransform: "none",
-                px: 3,
-                height: 58, // teraz ta sama wysokość co menu
-                // minHeight: 52,
-                borderColor: "rgba(255,255,255,0.22)",
-                color: "#fff",
-                alignItems: "center",
-              }}
-            >
-              Zacznij Projekt ↗
-            </Button>
-
+            <AnimatedButton />
             <IconButton
               onClick={() => setOpen(true)}
               sx={{ display: { xs: "flex", md: "none" }, color: "#fff" }}
