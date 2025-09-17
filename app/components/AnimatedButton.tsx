@@ -1,38 +1,36 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import { Button } from "@mui/material";
 import { gsap } from "gsap";
 
-const AnimatedButton: React.FC = () => {
-  const btnRef = useRef<HTMLButtonElement>(null);
+const AnimatedButton = () => {
+  const btnRef = useRef(null);
 
-  useEffect(() => {
+  // Funkcje uruchamiające animację
+  const handleMouseEnter = () => {
     if (!btnRef.current) return;
-
-    const hoverAnimation = gsap.to(btnRef.current, {
+    gsap.to(btnRef.current, {
       background: "linear-gradient(90deg, #ff6a00, #ee0979)",
       duration: 0.5,
-      paused: true,
       ease: "power1.inOut",
     });
+  };
 
-    const handleMouseEnter = () => hoverAnimation.play();
-    const handleMouseLeave = () => hoverAnimation.reverse();
-
-    const btn = btnRef.current;
-    btn.addEventListener("mouseenter", handleMouseEnter);
-    btn.addEventListener("mouseleave", handleMouseLeave);
-
-    return () => {
-      btn.removeEventListener("mouseenter", handleMouseEnter);
-      btn.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, []);
+  const handleMouseLeave = () => {
+    if (!btnRef.current) return;
+    gsap.to(btnRef.current, {
+      background: "initial", // wraca do początkowego koloru
+      duration: 0.5,
+      ease: "power1.inOut",
+    });
+  };
 
   return (
     <Button
       ref={btnRef}
-      component="button" // <- wymusza HTMLButtonElement
+      component="button"
       variant="outlined"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       sx={{
         display: { xs: "none", md: "inline-flex" },
         borderRadius: 9999,
