@@ -4,6 +4,7 @@ import { Card, CardContent, Typography, Box } from "@mui/material";
 import Link from "next/link";
 import { Project } from "../data/projectsData";
 import { useState, useRef } from "react";
+import { motion } from "framer-motion";
 
 interface Props {
   project: Project;
@@ -29,8 +30,11 @@ export default function ProjectCard({ project }: Props) {
 
   const handleMouseLeave = () => {
     setHovered(false);
-    videoRef.current?.pause();
-    videoRef.current!.currentTime = 0; // reset do pierwszej klatki
+    const video = videoRef.current;
+    if (video) {
+      video.pause();
+      video.currentTime = 0;
+    }
   };
 
   return (
@@ -50,7 +54,7 @@ export default function ProjectCard({ project }: Props) {
         onMouseLeave={handleMouseLeave}
         onMouseMove={handleMouseMove}
       >
-        {/* Video */}
+        {/* Obrazek jako miniatura */}
         <Box
           sx={{
             position: "relative",
@@ -59,11 +63,12 @@ export default function ProjectCard({ project }: Props) {
             overflow: "hidden",
           }}
         >
-          <video
-            ref={videoRef}
-            src={project.video}
-            muted
-            playsInline
+          <motion.img
+            src={project.thumbnail || "/placeholder.jpg"}
+            alt={project.title}
+            initial={{ opacity: 1 }}
+            animate={{ opacity: hovered ? 0 : 1 }}
+            transition={{ duration: 0.4 }}
             style={{
               width: "100%",
               height: "100%",
@@ -72,7 +77,28 @@ export default function ProjectCard({ project }: Props) {
             }}
           />
 
-          {/* Glassowy kursor */}
+          {/* 🎥 VIDEO pojawia się po hoverze */}
+          <motion.video
+            ref={videoRef}
+            src={project.video}
+            muted
+            playsInline
+            preload="metadata"
+            loop
+            initial={{ opacity: 0 }}
+            animate={{ opacity: hovered ? 1 : 0 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              borderRadius: "inherit",
+            }}
+          />
+
+          {/* Szklany kursor */}
           {hovered && (
             <Box
               sx={{

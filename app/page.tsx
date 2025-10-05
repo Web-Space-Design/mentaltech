@@ -4,6 +4,7 @@ import Hero from "./components/Hero";
 import ProjectsSection from "./components/ProjectsSection";
 import VideoBackground from "./components/VideoBackground";
 import OfferSection from "./components/OfferSection";
+import Footer from "./components/Footer";
 
 export default function Home() {
   return (
@@ -18,6 +19,9 @@ export default function Home() {
       </Box>
       <Box>
         <OfferSection />
+      </Box>
+      <Box>
+        <Footer />
       </Box>
     </div>
   );
