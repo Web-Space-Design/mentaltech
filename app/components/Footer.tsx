@@ -17,25 +17,27 @@ export default function Footer() {
     <Box
       sx={{
         position: "relative",
-
-        pt: 8,
-        pb: 4,
-        px: { xs: 2, sm: 4, md: 8 },
+        width: "100vw",
+        // pt: 8,
+        // pb: 4,
+        px: { xs: 2, sm: 2, md: 2 },
       }}
     >
       {/* cienka biała kreska z gradientem */}
       <Box />
 
-      <Container maxWidth={false} sx={{ mx: "auto" }}>
+      <Container maxWidth={false}>
         <Grid
           container
           spacing={0}
           sx={{
+            borderRadius: "20px",
             borderTop: "1px solid rgba(255,255,255,0.08)",
             borderLeft: "1px solid rgba(255,255,255,0.08)",
             "& > *": {
               borderRight: "1px solid rgba(255,255,255,0.08)",
               borderBottom: "1px solid rgba(255,255,255,0.08)",
+              borderRadius: "20px",
             },
           }}
         >
@@ -45,28 +47,31 @@ export default function Footer() {
               variant="h6"
               sx={{ fontWeight: 600, color: "white", mb: 2 }}
             >
-              Contact
+              Kontakt
             </Typography>
 
             <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
               <MuiLink
-                href="mailto:hello@twojafirma.pl"
+                href="mailto:biuro@mentaltech.pl"
+                target="_blank"
+                rel="noopener noreferrer"
                 underline="none"
                 sx={{ color: "rgba(255,255,255,0.85)", fontSize: "0.95rem" }}
               >
-                hello@twojafirma.pl
+                biuro@mentaltech.pl
               </MuiLink>
+
               <MuiLink
-                href="tel:+48123456789"
+                href="tel:+48881912998"
                 underline="none"
                 sx={{ color: "rgba(255,255,255,0.85)", fontSize: "0.95rem" }}
               >
-                +48 123 456 789
+                +48 881912998
               </MuiLink>
               <Typography
                 sx={{ color: "rgba(255,255,255,0.7)", fontSize: "0.9rem" }}
               >
-                ul. Przykładowa 10, Warszawa
+                ul. Pogoria 6, Dąbrowa Górnicza
               </Typography>
             </Box>
           </Grid>
@@ -77,16 +82,16 @@ export default function Footer() {
               variant="h6"
               sx={{ fontWeight: 600, color: "white", mb: 2 }}
             >
-              Links
+              Linki
             </Typography>
 
             <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
               {[
-                { label: "Work", href: "/work" },
-                { label: "Services", href: "/services" },
-                { label: "Culture", href: "/culture" },
-                { label: "Blog", href: "/blog" },
-                { label: "Contact", href: "/contact" },
+                { label: "Projekty", href: "/work" }, // pokazujecie portfolio / realizacje
+                { label: "Oferta", href: "/services" }, // to, co oferujecie klientom
+                { label: "O nas", href: "/culture" }, // Wasza kultura pracy, wartości
+                // { label: "Blog", href: "/blog" }, // można zostawić Blog, albo np. "Wpisy"
+                { label: "Kontakt", href: "/contact" },
               ].map((item) => (
                 <MuiLink
                   key={item.href}
@@ -118,6 +123,7 @@ export default function Footer() {
             borderTop: "1px solid rgba(255,255,255,0.08)",
             flexWrap: "wrap",
             gap: 2,
+            pb: 2,
           }}
         >
           {/* 🔥 Logo po LEWEJ */}

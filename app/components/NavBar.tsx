@@ -19,7 +19,7 @@ import AnimatedButton from "./AnimatedButton";
 const menuItems = [
   { label: "Projekty", href: "/work" }, // pokazujecie portfolio / realizacje
   { label: "Oferta", href: "/services" }, // to, co oferujecie klientom
-  { label: "Podejście", href: "/culture" }, // Wasza kultura pracy, wartości
+  { label: "O nas", href: "/culture" }, // Wasza kultura pracy, wartości
   // { label: "Blog", href: "/blog" }, // można zostawić Blog, albo np. "Wpisy"
   { label: "Kontakt", href: "/contact" }, // klasyk, najprostsza forma
 ];

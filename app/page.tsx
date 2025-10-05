@@ -5,6 +5,7 @@ import ProjectsSection from "./components/ProjectsSection";
 import VideoBackground from "./components/VideoBackground";
 import OfferSection from "./components/OfferSection";
 import Footer from "./components/Footer";
+import ContentText from "./components/ContentText";
 
 export default function Home() {
   return (
@@ -18,11 +19,17 @@ export default function Home() {
         <ProjectsSection />
       </Box>
       <Box>
-        <OfferSection />
+        <ContentText />
       </Box>
       <Box>
-        <Footer />
+        <OfferSection />
       </Box>
+
+      {/* <Box> */}
+      <VideoBackground src="/video/background-footer.mp4">
+        <Footer />
+      </VideoBackground>
+      {/* </Box> */}
     </div>
   );
 }
