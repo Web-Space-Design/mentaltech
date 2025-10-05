@@ -2,10 +2,13 @@ import React, { useRef } from "react";
 import { Button } from "@mui/material";
 import { gsap } from "gsap";
 
-const AnimatedButton = () => {
+interface AnimatedButtonProps {
+  text: string;
+}
+
+const AnimatedButton = ({ text }: AnimatedButtonProps) => {
   const btnRef = useRef(null);
 
-  // Funkcje uruchamiające animację
   const handleMouseEnter = () => {
     if (!btnRef.current) return;
     gsap.to(btnRef.current, {
@@ -18,7 +21,7 @@ const AnimatedButton = () => {
   const handleMouseLeave = () => {
     if (!btnRef.current) return;
     gsap.to(btnRef.current, {
-      background: "initial", // wraca do początkowego koloru
+      background: "initial",
       duration: 0.5,
       ease: "power1.inOut",
     });
@@ -43,7 +46,7 @@ const AnimatedButton = () => {
         transition: "color 0.5s ease, background 0.5s ease",
       }}
     >
-      Zacznij Projekt ↗
+      {text}
     </Button>
   );
 };

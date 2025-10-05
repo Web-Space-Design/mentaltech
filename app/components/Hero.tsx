@@ -75,7 +75,7 @@ const Hero = () => {
       />
 
       <Box sx={{ mt: 4 }}>
-        <AnimatedButton />
+        <AnimatedButton text=" Zacznij Projekt ↗" />
       </Box>
     </Box>
   );

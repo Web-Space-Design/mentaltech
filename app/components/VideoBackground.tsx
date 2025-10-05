@@ -93,7 +93,7 @@ const VideoBackground: React.FC<VideoProps> = ({
           top: "30%",
           left: "50%",
           width: "100%",
-          height: "100%",
+          height: "125%",
           objectFit: "cover",
           transform: "translate(-50%, -50%)",
           zIndex: -1,
