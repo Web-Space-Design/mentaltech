@@ -48,7 +48,7 @@ export default function OfferSection() {
     <Box
       sx={{
         bgcolor: "#000",
-        py: { xs: 10, md: 14 },
+        // py: { xs: 10, md: 14 },
         px: 2,
       }}
     >
@@ -61,7 +61,7 @@ export default function OfferSection() {
             justifyContent: "space-between",
             mb: 8,
             flexWrap: "wrap",
-            gap: 4,
+            gap: 2,
           }}
         >
           <Typography variant="h3" sx={{ fontWeight: "bold", color: "white" }}>

@@ -6,6 +6,7 @@ import VideoBackground from "./components/VideoBackground";
 import OfferSection from "./components/OfferSection";
 import Footer from "./components/Footer";
 import ContentText from "./components/ContentText";
+import GlassButton from "./components/GlassButton";
 
 export default function Home() {
   return (
@@ -24,7 +25,9 @@ export default function Home() {
       <Box>
         <OfferSection />
       </Box>
-
+      <Box sx={{ marginBottom: "70px" }}>
+        <GlassButton />
+      </Box>
       {/* <Box> */}
       <VideoBackground src="/video/background-footer.mp4">
         <Footer />
