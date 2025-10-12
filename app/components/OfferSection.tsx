@@ -52,25 +52,34 @@ export default function OfferSection() {
         px: 2,
       }}
     >
-      <Container maxWidth={false} sx={{ mx: "auto" }}>
+      <Container maxWidth={false}>
         {/* Nagłówek */}
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            mb: 8,
+            mb: 6,
             flexWrap: "wrap",
-            gap: 2,
+            gap: 4,
           }}
         >
-          <Typography variant="h3" sx={{ fontWeight: "bold", color: "white" }}>
+          <Typography
+            variant="h3"
+            sx={{
+              fontWeight: "700",
+              color: "white",
+              ml: { xs: 0, sm: 4, md: 4 },
+              fontSize: { xs: "42px", sm: "56px", md: "60px" },
+            }}
+          >
             Co{" "}
             <Box component="span">
               <Typography
                 variant="h3"
                 sx={{
                   fontWeight: 700,
+                  fontSize: { xs: "42px", sm: "64px", md: "70px" },
                   display: "inline-block",
                   background: "linear-gradient(90deg, #f60a41, #d86b13)",
                   WebkitBackgroundClip: "text",
@@ -93,7 +102,8 @@ export default function OfferSection() {
         <Box
           sx={{
             display: "grid",
-            gap: 4,
+            gap: 2,
+            ml: 4,
             gridTemplateColumns: { xs: "1fr", md: "repeat(2, 1fr)" },
             gridAutoRows: "minmax(280px, auto)",
             gridTemplateAreas: {

@@ -3,7 +3,7 @@
 import { Card, CardContent, Typography, Box } from "@mui/material";
 import Link from "next/link";
 import { Project } from "../data/projectsData";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 interface Props {
@@ -12,26 +12,52 @@ interface Props {
 
 export default function ProjectCard({ project }: Props) {
   const [hovered, setHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
+  // 🔍 Wykrywanie czy urządzenie jest mobilne
+  useEffect(() => {
+    const checkMobile = () => {
+      if (typeof window !== "undefined") {
+        setIsMobile(window.innerWidth < 768);
+      }
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // 📱 Auto-play na urządzeniach mobilnych
+  useEffect(() => {
+    if (isMobile && videoRef.current) {
+      videoRef.current.play().catch(() => {
+        // niektóre przeglądarki mogą zablokować autoplay — można pominąć
+      });
+    }
+  }, [isMobile]);
+
   const handleMouseEnter = () => {
-    setHovered(true);
-    videoRef.current?.play();
+    if (!isMobile) {
+      setHovered(true);
+      videoRef.current?.play();
+    }
   };
 
   const handleMouseLeave = () => {
-    setHovered(false);
-    const video = videoRef.current;
-    if (video) {
-      video.pause();
-      video.currentTime = 0;
+    if (!isMobile) {
+      setHovered(false);
+      const video = videoRef.current;
+      if (video) {
+        video.pause();
+        video.currentTime = 0;
+      }
     }
   };
 
   return (
     <Link href={`/projects/${project.slug}`} style={{ textDecoration: "none" }}>
       <Card
-        className="target" // 👈 ważne! teraz kursor reaguje
+        className="target"
         sx={{
           position: "relative",
           borderRadius: "28px",
@@ -57,7 +83,7 @@ export default function ProjectCard({ project }: Props) {
             src={project.thumbnail || "/placeholder.jpg"}
             alt={project.title}
             initial={{ opacity: 1 }}
-            animate={{ opacity: hovered ? 0 : 1 }}
+            animate={{ opacity: hovered || isMobile ? 0 : 1 }}
             transition={{ duration: 0.4 }}
             style={{
               width: "100%",
@@ -74,8 +100,9 @@ export default function ProjectCard({ project }: Props) {
             playsInline
             preload="metadata"
             loop
+            autoPlay={isMobile} // ✅ autoplay tylko na mobilu
             initial={{ opacity: 0 }}
-            animate={{ opacity: hovered ? 1 : 0 }}
+            animate={{ opacity: hovered || isMobile ? 1 : 0 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
             style={{
               position: "absolute",

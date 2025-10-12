@@ -12,7 +12,6 @@ export default function ProjectsSection() {
   return (
     <Box
       sx={{
-        // bgcolor: "black",
         px: 2,
         position: "relative",
         width: "100vw",
@@ -28,14 +27,16 @@ export default function ProjectsSection() {
             justifyContent: "space-between",
             mb: 6,
             flexWrap: "wrap",
-            gap: 2,
+            gap: 4,
           }}
         >
           <Typography
             variant="h3"
             sx={{
-              fontWeight: "bold",
+              fontSize: { xs: "42px", sm: "56px", md: "60px" },
+              fontWeight: 700,
               color: "white",
+              ml: { xs: 0, sm: 4, md: 4 },
             }}
           >
             Od pomysłu do{" "}
@@ -43,6 +44,7 @@ export default function ProjectsSection() {
               <Typography
                 variant="h3"
                 sx={{
+                  fontSize: { xs: "42px", sm: "56px", md: "60px" },
                   fontWeight: 700,
                   display: "inline-block",
                   background: "linear-gradient(90deg, #f60a41, #d86b13)",
@@ -58,21 +60,42 @@ export default function ProjectsSection() {
             </Box>
           </Typography>
 
-          <Link href="/projects">
-            <AnimatedButton text="Zobacz wszystkie prace ↗" />
-          </Link>
+          {/* Przycisk widoczny tylko na większych ekranach */}
+          <Box sx={{ display: { xs: "none", sm: "block" } }}>
+            <Link href="/projects">
+              <AnimatedButton text="Zobacz wszystkie prace ↗" />
+            </Link>
+          </Box>
         </Box>
 
         {/* Grid projektów */}
         <Container maxWidth={false} disableGutters>
           <Grid container spacing={4}>
             {featuredProjects.map((project) => (
-              <Grid key={project.id} size={{ xs: 12, md: 6 }}>
+              <Grid key={project.id} size={{ xs: 12, md: 6 }} sx={{ p: 4 }}>
                 <ProjectCard project={project} />
               </Grid>
             ))}
           </Grid>
         </Container>
+        <Box
+          sx={{
+            display: { xs: "flex", sm: "none" },
+            justifyContent: "center",
+            mt: 4,
+            width: "100%",
+            "& button": {
+              // nadpisanie stylu AnimatedButton
+              display: "inline-flex !important",
+              opacity: 1,
+              position: "relative !important",
+            },
+          }}
+        >
+          <Link href="/projects" style={{ textAlign: "center" }}>
+            <AnimatedButton text="Zobacz wszystkie prace ↗" />
+          </Link>
+        </Box>
       </Container>
     </Box>
   );
