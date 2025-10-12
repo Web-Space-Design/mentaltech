@@ -13,7 +13,7 @@ export default function Home() {
     <div>
       {/* <Hero />
       <VideoBackground src="/video/background-hero.mp4" /> */}
-      <VideoBackground src="/video/background-hero.mp4" height="85vh">
+      <VideoBackground src="/video/background.mp4" height="85vh">
         <Hero />
       </VideoBackground>
       <Box sx={{}}>

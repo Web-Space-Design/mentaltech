@@ -3,7 +3,7 @@
 import { Card, CardContent, Typography, Box } from "@mui/material";
 import Link from "next/link";
 import { Project } from "../data/projectsData";
-import { useState, useRef } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 
 interface Props {
@@ -11,17 +11,8 @@ interface Props {
 }
 
 export default function ProjectCard({ project }: Props) {
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [hovered, setHovered] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setCursorPos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
-  };
 
   const handleMouseEnter = () => {
     setHovered(true);
@@ -40,6 +31,7 @@ export default function ProjectCard({ project }: Props) {
   return (
     <Link href={`/projects/${project.slug}`} style={{ textDecoration: "none" }}>
       <Card
+        className="target" // 👈 ważne! teraz kursor reaguje
         sx={{
           position: "relative",
           borderRadius: "28px",
@@ -52,9 +44,7 @@ export default function ProjectCard({ project }: Props) {
         }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        onMouseMove={handleMouseMove}
       >
-        {/* Obrazek jako miniatura */}
         <Box
           sx={{
             position: "relative",
@@ -77,7 +67,6 @@ export default function ProjectCard({ project }: Props) {
             }}
           />
 
-          {/* 🎥 VIDEO pojawia się po hoverze */}
           <motion.video
             ref={videoRef}
             src={project.video}
@@ -97,51 +86,15 @@ export default function ProjectCard({ project }: Props) {
               borderRadius: "inherit",
             }}
           />
-
-          {/* Szklany kursor */}
-          {hovered && (
-            <Box
-              sx={{
-                position: "absolute",
-                top: cursorPos.y - 60,
-                left: cursorPos.x - 60,
-                width: 120,
-                height: 120,
-                borderRadius: "50%",
-                background: "rgba(255,255,255,0.15)",
-                backdropFilter: "blur(12px)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontWeight: 600,
-                fontSize: "1rem",
-                color: "#fff",
-                pointerEvents: "none",
-                zIndex: 5,
-                transition: "all 0.15s ease",
-              }}
-            >
-              <Box
-                sx={{
-                  position: "absolute",
-                  inset: 0,
-                  borderRadius: "50%",
-                  p: "2px",
-                  background: "linear-gradient(90deg, #f60a41, #d86b13)",
-                  WebkitMask:
-                    "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-                  WebkitMaskComposite: "xor",
-                  maskComposite: "exclude",
-                }}
-              />
-              Zobacz
-            </Box>
-          )}
         </Box>
 
-        {/* Tekst pod spodem */}
         <CardContent sx={{ bgcolor: "black", minHeight: 120 }}>
-          <Typography variant="h6" fontWeight="bold" color="white">
+          <Typography
+            className="text"
+            variant="h6"
+            fontWeight="bold"
+            color="white"
+          >
             {project.title}
           </Typography>
           <Typography variant="body2" color="gray">
