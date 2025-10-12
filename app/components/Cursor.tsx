@@ -2,19 +2,21 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { usePathname } from "next/navigation";
 
 export default function Cursor() {
   const outlineRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
     const outline = outlineRef.current;
     const dot = dotRef.current;
     if (!outline || !dot) return;
 
-    // 👉 Ustawienia początkowe (większe i bardziej widoczne)
-    gsap.set(dot, { scale: 0.2 }); // było 0.04 — zwiększamy
-    gsap.set(outline, { scale: 0.6 }); // lekko większy kontur
+    // Początkowy stan kursora
+    gsap.set(dot, { scale: 0.2, opacity: 0 });
+    gsap.set(outline, { scale: 0.6, opacity: 0 });
 
     const xCTo = gsap.quickTo(outline, "left", { duration: 0.3 });
     const yCTo = gsap.quickTo(outline, "top", { duration: 0.3 });
@@ -24,7 +26,6 @@ export default function Cursor() {
     let mouseInTarget = false;
     let isVisible = false;
 
-    // 👉 Animacja powiększania przy najechaniu na .target
     const scaleAnim = gsap.timeline({ paused: true });
     scaleAnim
       .to(outline, { scale: 1.1, duration: 0.3, ease: "power2.out" })
@@ -49,69 +50,70 @@ export default function Cursor() {
         isVisible = true;
       }
 
-      const cursorPosition = { left: e.clientX, top: e.clientY };
-
+      const cursorPos = { left: e.clientX, top: e.clientY };
       let hovered = false;
 
       targets.forEach((target) => {
         const rect = target.getBoundingClientRect();
         const triggerDistance = rect.width;
-        const targetPosition = {
+        const targetPos = {
           left: rect.left + rect.width / 2,
           top: rect.top + rect.height / 2,
         };
-        const distance = {
-          adj: targetPosition.left - cursorPosition.left,
-          opp: targetPosition.top - cursorPosition.top,
-        };
-        const hypotenuse = Math.sqrt(distance.adj ** 2 + distance.opp ** 2);
-        const angle = Math.atan2(distance.adj, distance.opp);
+        const dx = targetPos.left - cursorPos.left;
+        const dy = targetPos.top - cursorPos.top;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const angle = Math.atan2(dx, dy);
 
-        if (hypotenuse * 2 < triggerDistance && mouseInTarget) {
-          xCTo(targetPosition.left - (Math.sin(angle) * hypotenuse) / 4);
-          yCTo(targetPosition.top - (Math.cos(angle) * hypotenuse) / 4);
-          xDTo(targetPosition.left - (Math.sin(angle) * hypotenuse) / 4);
-          yDTo(targetPosition.top - (Math.cos(angle) * hypotenuse) / 4);
+        if (distance * 2 < triggerDistance && mouseInTarget) {
+          xCTo(targetPos.left - (Math.sin(angle) * distance) / 4);
+          yCTo(targetPos.top - (Math.cos(angle) * distance) / 4);
+          xDTo(targetPos.left - (Math.sin(angle) * distance) / 4);
+          yDTo(targetPos.top - (Math.cos(angle) * distance) / 4);
 
-          gsap.to(target.querySelector(".text"), {
-            x: -((Math.sin(angle) * hypotenuse) / 8),
-            y: -((Math.cos(angle) * hypotenuse) / 8),
-            duration: 0.6,
-            ease: "power2.out",
-          });
+          const text = target.querySelector<HTMLElement>(".text");
+          if (text) {
+            gsap.to(text, {
+              x: -((Math.sin(angle) * distance) / 8),
+              y: -((Math.cos(angle) * distance) / 8),
+              duration: 0.6,
+              ease: "power2.out",
+            });
+          }
 
           hovered = true;
         } else {
-          gsap.to(target.querySelector(".text"), {
-            x: 0,
-            y: 0,
-            duration: 0.6,
-            ease: "power2.out",
-          });
+          const text = target.querySelector<HTMLElement>(".text");
+          if (text)
+            gsap.to(text, { x: 0, y: 0, duration: 0.6, ease: "power2.out" });
         }
       });
 
       if (!hovered) {
-        xCTo(cursorPosition.left);
-        yCTo(cursorPosition.top);
-        xDTo(cursorPosition.left);
-        yDTo(cursorPosition.top);
+        xCTo(cursorPos.left);
+        yCTo(cursorPos.top);
+        xDTo(cursorPos.left);
+        yDTo(cursorPos.top);
       }
     };
 
     document.addEventListener("mousemove", mouseMove);
-    return () => document.removeEventListener("mousemove", mouseMove);
-  }, []);
+
+    // Reset kursora przy zmianie strony
+    return () => {
+      gsap.set(dot, { scale: 0.2, opacity: 0 });
+      gsap.set(outline, { scale: 0.6, opacity: 0 });
+    };
+  }, [pathname]); // <- efekt zależny od ścieżki
 
   return (
     <>
-      {/* obrys */}
       <div
         ref={outlineRef}
         className="cursor-outline"
         style={{
           position: "fixed",
-          width: 90, // było 80 — troszkę większy
+          width: 90,
           height: 90,
           borderRadius: "50%",
           border: "1px solid rgba(255,255,255,0.5)",
@@ -124,16 +126,15 @@ export default function Cursor() {
           mixBlendMode: "difference",
         }}
       />
-      {/* kropka w środku */}
       <div
         ref={dotRef}
         className="cursor-dot"
         style={{
           position: "fixed",
-          width: 32, // było 20 — powiększamy
+          width: 32,
           height: 32,
           borderRadius: "50%",
-          background: "linear-gradient(90deg, #f60a41 0%, #d86b13 100%)", // 🔥 gradient
+          background: "linear-gradient(90deg, #f60a41 0%, #d86b13 100%)",
           boxShadow: "0 0 20px rgba(246,10,65,0.5)",
           pointerEvents: "none",
           opacity: 0,
@@ -141,7 +142,7 @@ export default function Cursor() {
           left: 0,
           zIndex: 9999,
           transform: "translate(-50%, -50%)",
-          mixBlendMode: "difference", // efekt świetnego kontrastu na ciemnym tle
+          mixBlendMode: "difference",
         }}
       />
     </>
