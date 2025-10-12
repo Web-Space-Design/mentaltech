@@ -12,7 +12,7 @@ export default function ProjectsSection() {
   return (
     <Box
       sx={{
-        px: 2,
+        px: { xs: 1, sm: 2, md: 4 }, //
         position: "relative",
         width: "100vw",
         zIndex: 0,
@@ -72,7 +72,13 @@ export default function ProjectsSection() {
         <Container maxWidth={false} disableGutters>
           <Grid container spacing={4}>
             {featuredProjects.map((project) => (
-              <Grid key={project.id} size={{ xs: 12, md: 6 }} sx={{ p: 4 }}>
+              <Grid
+                key={project.id}
+                size={{ xs: 12, md: 6 }}
+                sx={{
+                  p: { xs: 1.5, sm: 2, md: 4 }, // 🔥 mniejsze odstępy w gridzie na mobile
+                }}
+              >
                 <ProjectCard project={project} />
               </Grid>
             ))}

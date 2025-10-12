@@ -85,6 +85,7 @@ export default function ProjectCard({ project }: Props) {
             initial={{ opacity: 1 }}
             animate={{ opacity: hovered || isMobile ? 0 : 1 }}
             transition={{ duration: 0.4 }}
+            loading="lazy" // 📌 lazy loading dla szybszego renderowania
             style={{
               width: "100%",
               height: "100%",
@@ -96,6 +97,7 @@ export default function ProjectCard({ project }: Props) {
           <motion.video
             ref={videoRef}
             src={project.video}
+            poster={project.thumbnail || "/placeholder.jpg"} // 📌 poster przyspiesza render
             muted
             playsInline
             preload="metadata"
