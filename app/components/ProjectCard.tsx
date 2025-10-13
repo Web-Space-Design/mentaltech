@@ -2,6 +2,7 @@
 
 import { Card, CardContent, Typography, Box } from "@mui/material";
 import Link from "next/link";
+import Image from "next/image";
 import { Project } from "../data/projectsData";
 import { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
@@ -13,33 +14,46 @@ interface Props {
 export default function ProjectCard({ project }: Props) {
   const [hovered, setHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // 🔍 Wykrywanie czy urządzenie jest mobilne
+  // 🔍 Wykrywanie urządzenia mobilnego
   useEffect(() => {
-    const checkMobile = () => {
-      if (typeof window !== "undefined") {
-        setIsMobile(window.innerWidth < 768);
-      }
-    };
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // 📱 Auto-play na urządzeniach mobilnych
+  // 👁️ Lazy loading — wideo ładuje się dopiero gdy widoczne
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setIsVisible(true);
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    if (containerRef.current) observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // 📱 Auto-play tylko na mobile
   useEffect(() => {
     if (isMobile && videoRef.current) {
-      videoRef.current.play().catch(() => {
-        // niektóre przeglądarki mogą zablokować autoplay — można pominąć
-      });
+      videoRef.current.play().catch(() => {});
     }
   }, [isMobile]);
 
   const handleMouseEnter = () => {
     if (!isMobile) {
-      setHovered(true);
-      videoRef.current?.play();
+      setTimeout(() => {
+        setHovered(true);
+        videoRef.current?.play();
+      }, 200);
     }
   };
 
@@ -72,6 +86,7 @@ export default function ProjectCard({ project }: Props) {
         onMouseLeave={handleMouseLeave}
       >
         <Box
+          ref={containerRef}
           sx={{
             position: "relative",
             width: "100%",
@@ -79,51 +94,53 @@ export default function ProjectCard({ project }: Props) {
             overflow: "hidden",
           }}
         >
-          <motion.img
-            src={project.thumbnail || "/placeholder.jpg"}
-            alt={project.title}
+          {/* 🖼️ Miniatura */}
+          <motion.div
             initial={{ opacity: 1 }}
             animate={{ opacity: hovered || isMobile ? 0 : 1 }}
             transition={{ duration: 0.4 }}
-            loading="lazy" // 📌 lazy loading dla szybszego renderowania
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              display: "block",
-            }}
-          />
+            style={{ position: "absolute", inset: 0 }}
+          >
+            <Image
+              src={project.thumbnail || "/placeholder.jpg"}
+              alt={project.title}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              style={{ objectFit: "cover" }}
+              placeholder="blur"
+              blurDataURL="/tiny-placeholder.jpg"
+              priority={false}
+            />
+          </motion.div>
 
-          <motion.video
-            ref={videoRef}
-            src={project.video}
-            poster={project.thumbnail || "/placeholder.jpg"} // 📌 poster przyspiesza render
-            muted
-            playsInline
-            preload="metadata"
-            loop
-            autoPlay={isMobile} // ✅ autoplay tylko na mobilu
-            initial={{ opacity: 0 }}
-            animate={{ opacity: hovered || isMobile ? 1 : 0 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
-            style={{
-              position: "absolute",
-              inset: 0,
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              borderRadius: "inherit",
-            }}
-          />
+          {/* 🎬 Wideo ładowane dopiero gdy widoczne */}
+          {isVisible && (
+            <motion.video
+              ref={videoRef}
+              src={project.video}
+              poster={project.thumbnail || "/placeholder.jpg"}
+              muted
+              playsInline
+              preload="none" // ✅ nie pobiera wideo zanim nie jest potrzebne
+              loop
+              autoPlay={isMobile} // autoplay tylko na mobile
+              initial={{ opacity: 0 }}
+              animate={{ opacity: hovered || isMobile ? 1 : 0 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                borderRadius: "inherit",
+              }}
+            />
+          )}
         </Box>
 
         <CardContent sx={{ bgcolor: "black", minHeight: 120 }}>
-          <Typography
-            className="text"
-            variant="h6"
-            fontWeight="bold"
-            color="white"
-          >
+          <Typography variant="h6" fontWeight="bold" color="white">
             {project.title}
           </Typography>
           <Typography variant="body2" color="gray">

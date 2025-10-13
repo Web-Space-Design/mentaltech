@@ -23,7 +23,7 @@ const Hero = () => {
         variant="h6"
         sx={{
           mb: 2,
-          fontSize: { xs: "16px", md: "20px" }, // dopasowanie rozmiaru
+          fontSize: { xs: "16px", md: "20px", color: "#fff" }, // dopasowanie rozmiaru
         }}
       >
         UX/UI & DEV
