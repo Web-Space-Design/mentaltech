@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/NavBar";
-import ThemeRegistry from "./ThemeRegistry";
 import CursorWrapper from "./components/CursorWrapper";
 
 const geistSans = Geist({
@@ -60,11 +59,9 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable}`}
       >
-        <ThemeRegistry>
-          <CursorWrapper />
-          <Navbar />
-          {children}
-        </ThemeRegistry>
+        <CursorWrapper />
+        <Navbar />
+        {children}
       </body>
     </html>
   );
