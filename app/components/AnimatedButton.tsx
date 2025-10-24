@@ -4,10 +4,14 @@ import { gsap } from "gsap";
 
 interface AnimatedButtonProps {
   text: string;
+  hideOnMobile?: boolean; // ← nowy opcjonalny props
 }
 
-const AnimatedButton = ({ text }: AnimatedButtonProps) => {
-  const btnRef = useRef(null);
+const AnimatedButton = ({
+  text,
+  hideOnMobile = false,
+}: AnimatedButtonProps) => {
+  const btnRef = useRef<HTMLButtonElement | null>(null);
 
   const handleMouseEnter = () => {
     if (!btnRef.current) return;
@@ -34,8 +38,12 @@ const AnimatedButton = ({ text }: AnimatedButtonProps) => {
       variant="outlined"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onTouchStart={handleMouseEnter}
+      onTouchEnd={handleMouseLeave}
       sx={{
-        display: { xs: "none", md: "inline-flex" },
+        display: hideOnMobile
+          ? { xs: "none", md: "inline-flex" }
+          : "inline-flex",
         borderRadius: 9999,
         textTransform: "none",
         px: 3,

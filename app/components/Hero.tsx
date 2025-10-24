@@ -46,22 +46,6 @@ const Hero = () => {
         Agencja Interaktywna
       </Typography>
 
-      {/* <Typography
-        variant="h5"
-        sx={{
-          mt: 4,
-          maxWidth: "900px",
-          fontSize: { xs: "16px", sm: "18px", md: "22px" },
-          fontWeight: 400,
-          color: "#fff",
-        }}
-      >
-        Zmieniamy pomysły w produkty cyfrowe, które sprzedają. <br />
-        Projektujemy i rozwijamy strony, aplikacje i interfejsy – szybkie,
-        intuicyjne i dopasowane do Twoich użytkowników. Dzięki temu Twoja marka
-        nie tylko wygląda nowocześnie, ale realnie zdobywa nowych klientów.
-      </Typography> */}
-
       <AnimatedText
         text={textTitle}
         mode="lines"

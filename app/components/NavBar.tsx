@@ -133,7 +133,7 @@ export default function Navbar() {
           <Box
             sx={{ display: "flex", alignItems: "center", gap: 1.5, ml: "auto" }}
           >
-            <AnimatedButton text="Zacznij Projekt ↗" />
+            <AnimatedButton text="Zacznij Projekt ↗" hideOnMobile />
             <IconButton
               onClick={() => setOpen(true)}
               sx={{ display: { xs: "flex", md: "none" }, color: "#fff" }}

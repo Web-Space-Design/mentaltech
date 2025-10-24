@@ -3,6 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/NavBar";
 import CursorWrapper from "./components/CursorWrapper";
+import { Box } from "@mui/material";
+import VideoBackground from "./components/VideoBackground";
+import Footer from "./components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -60,8 +63,14 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable}`}
       >
         <CursorWrapper />
-        <Navbar />
+        <Box sx={{ mb: 12 }}>
+          <Navbar />
+        </Box>
+
         {children}
+        <VideoBackground src="/video/background-footer.mp4">
+          <Footer />
+        </VideoBackground>
       </body>
     </html>
   );
